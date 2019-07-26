@@ -1,0 +1,8 @@
+<!--utils/ui/jd-popup/index.wxml-->
+<view class="popup-view" style="z-index:{{zIndex}}" wx:if='{{inited}}'>
+  <view class="mask {{display?'display':''}}" style="background-color:{{bg}}" catch:touchmove='preventTouchMove'></view>
+  <view class="view">
+    <view class="block {{animation}}-enter {{display?'inner':''}}"> <slot/> </view>
+    <slot name='out'/>
+  </view>
+</view>

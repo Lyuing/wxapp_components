@@ -1,0 +1,69 @@
+/* utils/ui/jd-popup/index.wxss */
+
+.popup-view{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+.mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  -webkit-transition: all 200ms;
+  transition: all 200ms;
+  opacity: 0;
+}
+.mask.display{
+  opacity: 1;
+}
+.view{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+.block{
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 300ms;
+  transition: all 300ms;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+}
+.bottom-enter{
+  -webkit-transform: translateY(100%);
+  transform: translateY(100%);
+}
+.top-enter{
+  -webkit-transform: translateY(-100%);
+  transform: translateY(-100%);
+}
+.left-enter{
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+.right-enter{
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+}
+.flash-enter{
+  opacity: 0;
+}
+.grow-enter{
+  -webkit-transform: scale(.5);
+  transform: scale(.5);
+}
+.block.inner{
+  -webkit-transform: translate(0, 0) scale(1);
+  transform: translate(0, 0) scale(1);
+  opacity: 1;
+}
