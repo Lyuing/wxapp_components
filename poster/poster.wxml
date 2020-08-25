@@ -1,0 +1,7 @@
+
+<view class="poster-view">
+  <canvas type="2d" id="myCanvas" class="myCanvas"/>
+  <view class="loading-tip tip">加载中...</view>
+  <image src="{{imgUrl}}" class="template-img" bindtap="onSaveImage"/>
+</view>
+<view class="tip"><text>点击图片，保存到手机</text></view>
