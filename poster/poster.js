@@ -165,9 +165,17 @@ Component({
     async loadPhoto(canvas, ctx){
       let url = this.properties.url
       if(!url) return;
+
+      let info = await new Promise((resolve, reject)=>{
+        wx.getImageInfo({
+          src: url,
+          success: resolve,
+          fail: reject
+        })
+      })
       let image = await new Promise((resolve, reject)=>{
         let img = canvas.createImage()
-        img.src = url
+        img.src = info && info.path||url
         img.onload = () => {
           img ? resolve(img) : reject()
         }
@@ -182,8 +190,33 @@ Component({
           icon: 'none'
         })
       })
-      console.log('loadPhoto:',new Date())
-      return await ctx.drawImage(image, 74, 128, 522, 392)
+
+      if(info && info.width){
+        let { width: w, height: h} = info
+        // console.log('info:', w, h)
+        let offset_x = 0,       // 图片横向偏移量
+          offset_y = 0,         // 图片纵向偏移量
+          clit_w = 0,           // 图片裁剪宽度
+          clit_h = 0,           // 图片裁剪高度
+          w2h = parseInt(w * 392 / 522),      // 根据宽度计算的锁定高度
+          h2w = parseInt(h * 522 / 392);      // 根据高度计算的锁定宽度
+        if(w2h <= h){
+          // 裁剪上下两端
+          clit_w = w
+          clit_h = w2h
+          offset_y = parseInt((h-w2h) / 2)
+        }else{
+          // 裁剪左右两端
+          clit_w = h2w
+          clit_h = h
+          offset_x = parseInt((w-h2w) / 2)
+        }
+        console.log('loadPhoto clip:',new Date())
+        return await ctx.drawImage(image, offset_x, offset_y, clit_w, clit_h, 74, 128, 522, 392)
+      }else{
+        console.log('loadPhoto origin:',new Date())
+        return await ctx.drawImage(image, 74, 128, 522, 392)
+      }
     },
     async drawScope(canvas, ctx){
       try {
