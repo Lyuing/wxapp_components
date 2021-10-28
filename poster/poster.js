@@ -74,6 +74,8 @@ Component({
 
       // 背景图
       await this.drawPaper(canvas, ctx)
+      // 绘制用户 圆形头像
+      await this.drawUserHead(canvas, ctx)
       ctx.save()
       // 背景线条
       this.arrayLine(ctx)
@@ -118,6 +120,26 @@ Component({
       }
       console.log('paper:',new Date())
     },
+    async drawUserHead(canvas, ctx){
+      try {
+        // let userHead = ds.getUserInfo()?.headUrl || "../../../image/friend/guide-head.png";
+        let userHead = ds.getUserInfo()?.headUrl || "https://pic.ttljd.cn/guide-head.png";
+        let img = await this.awaitImage(canvas, userHead)
+        // 利用 clip 从原始画布中剪切任意形状和尺寸，
+        // 并把随后的操作 限制在此区域中，
+        // 可以在使用 clip 方法前通过使用 save 方法对当前画布区域进行保存，
+        // 并在以后的任意时间通过restore方法对其进行恢复
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(72, 64, 40, 0, Math.PI * 2);
+        ctx.clip();       //剪切路径
+        ctx.drawImage(img, 32, 24, 80, 80)
+        ctx.restore();    //恢复状态
+      } catch (error) {
+        console.log(error)
+      }
+      console.log('UserHead:',new Date())
+    },
     arrayLine(ctx){
       let startY = 92,
         repeat = 13;
@@ -132,6 +154,8 @@ Component({
     },
     writeDate(ctx){
       let text = this.properties.date;
+      // 实例: ctx.font="italic small-caps bold 12px arial";
+      // 若有机型字体缩小，需改字体为 sans-serif
       ctx.font = `32px Microsoft YaHei`
       ctx.fillStyle = "#BF9356"
       ctx.textBaseline="top"
@@ -190,7 +214,7 @@ Component({
           icon: 'none'
         })
       })
-
+      // 获取网图 尺寸信息，并进行裁剪
       if(info && info.width){
         let { width: w, height: h} = info
         // console.log('info:', w, h)
@@ -312,6 +336,7 @@ Component({
       })
     },
 
+    // 绘制圆角
     roundRect(ctx, x, y, w, h, r, bgc='#FFF8EB') {
       // 开始绘制
       ctx.beginPath()
